@@ -1,0 +1,29 @@
+## 2026-05-10 11:34 IST
+
+- Affected files: `logs/build-history.log`, `docs/testing/testing-report.md`
+- Issue description: Build history log required by the project maintenance rules was missing.
+- Root cause: Earlier documentation tracked some runtime results but did not provide a dedicated build history file.
+- Fix implemented: Added this append-only build history log with the current documentation-system setup entry.
+- Result after fix: Future backend, web, and Expo build/export results can be recorded chronologically.
+- Commands executed: `Get-ChildItem`, `rg --files`, `Get-Content`
+- Important observations: Existing mobile logs mention a clean Android export and Expo LAN server verification on 2026-05-10.
+
+## 2026-05-10 12:05 IST
+
+- Affected files: `frontend-web/build/`, `frontend-mobile/dist-qa/`, `logs/build-history.log`
+- Issue description: Web and mobile build/export validation was required for stabilization.
+- Root cause: QA phase needed current build proof after test asset and report generation.
+- Fix implemented: Ran React production build and Expo Android export.
+- Result after fix: React build compiled successfully; Expo Android export completed and generated `dist-qa`.
+- Commands executed: `npm.cmd run build`; `npx.cmd expo export --platform android --output-dir dist-qa`
+- Important observations: PowerShell blocked `npm`/`npx` `.ps1` shims, so `.cmd` launchers were used. React build emitted a Node deprecation warning for `fs.F_OK` but completed successfully.
+
+## 2026-05-10 12:20 IST
+
+- Affected files: `frontend-web/build/`, `frontend-mobile/dist-qa/`
+- Issue description: Production deployment readiness required current frontend and mobile build verification.
+- Root cause: Deployment configs were added and needed validation.
+- Fix implemented: Ran React build with production-style `REACT_APP_API_BASE`; ran Expo Android export with production-style `EXPO_PUBLIC_API_BASE_URL`.
+- Result after fix: React production build passed; Expo Android export passed.
+- Commands executed: `npm.cmd run build`; `npx.cmd expo export --platform android --output-dir dist-qa`
+- Important observations: Public live deployment is pending Vercel/Render/Expo authentication.

@@ -1,0 +1,5 @@
+case,status,pages,output_mb,seconds,observations
+text opacity 0.1,200,25,0.017,0.134,Text watermark applied
+text opacity 0.35,200,25,0.017,0.125,Text watermark applied
+text opacity 0.7,200,25,0.017,0.132,Text watermark applied
+image watermark,not implemented,0,0,0,Current API supports text watermark only; image watermark endpoint is not present.

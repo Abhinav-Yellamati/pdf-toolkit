@@ -1,0 +1,27 @@
+2026-05-10 API error log
+
+- Mobile API requests now log endpoint, file field, file count, and response failures.
+- Network failures now include the resolved backend URL in the user-facing message.
+- Backend LAN URL used for demo: http://10.196.40.171:8001/api/pdf
+- LAN health verification: GET /health returned 200.
+- LAN compress verification: POST /api/pdf/compress returned 200 and produced stable-mobile-compress.pdf.
+
+2026-05-10 11:34 IST API documentation traceability entry
+
+- Affected files: `logs/api-errors.log`, `docs/debugging/debugging-timeline.md`, `CHANGELOG.md`
+- Issue description: API error history needed to participate in the global project logging system.
+- Root cause: API errors were logged, but the broader documentation policy was not yet formalized.
+- Fix implemented: Preserved existing API observations and appended this baseline entry.
+- Result after fix: Future API failures should include endpoint, request shape, error response, root cause, fix, and validation result.
+- Commands executed: `Get-Content logs\api-errors.log`
+- Important observations: No new API failure was triggered during this documentation-only setup.
+
+2026-05-10 12:05 IST API validation QA entry
+
+- Affected files: `logs/api-errors.log`, `test-assets/reports/backend-results.csv`, `docs/testing/backend-testing-report.md`
+- Issue description: Backend error handling needed validation for invalid uploads.
+- Root cause: Stabilization QA requires proof that bad input is handled cleanly.
+- Fix implemented: Sent a non-PDF upload to `/api/pdf/compress`.
+- Result after fix: API returned HTTP 400 with `Please upload a PDF file.`, confirming handled validation behavior.
+- Commands executed: `python .\test-assets\reports\run_full_qa.py`
+- Important observations: No unhandled API exception occurred during the QA run.

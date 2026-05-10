@@ -1,0 +1,29 @@
+## 2026-05-10 11:34 IST
+
+- Affected files: `logs/`, `docs/`, `changelog/`, `history/`, `CHANGELOG.md`
+- Issue description: Project needed a complete engineering traceability system for future maintenance, presentation, debugging, and review.
+- Root cause: Documentation existed in several places, but the required global log set, changelog, session history, testing records, and presentation-ready document structure were incomplete.
+- Fix implemented: Created the missing logging/documentation directories and added the required baseline files. Established append-only log rules for future work.
+- Result after fix: The project now has a formal place for development logs, debugging history, API/runtime/build/dependency/testing logs, changelog entries, session memory, architecture notes, and presentation material.
+- Commands executed: `Get-ChildItem -Force`; `Get-ChildItem -Recurse -Filter package.json`; `rg --files`; `Get-Content`; `New-Item -ItemType Directory -Force ...`
+- Important observations: `git` is not available in this PowerShell environment, so repository status could not be checked with `git status`.
+
+## 2026-05-10 11:45 IST
+
+- Affected files: `logs/development.log`, project documentation paths under `C:\Users\abhin\Downloads\pdf-project`
+- Issue description: Initial patch application created duplicate documentation files relative to the user profile instead of only inside the project directory.
+- Root cause: The patch tool used its default working location for relative paths.
+- Fix implemented: Re-applied the documentation system with absolute project paths and removed only the duplicate files outside the project.
+- Result after fix: Required documentation files exist inside `pdf-project`, and duplicate files under `C:\Users\abhin` were removed.
+- Commands executed: `Test-Path`, `Get-ChildItem`, `apply_patch`
+- Important observations: Future file edits should use absolute project paths when the tool working directory is ambiguous.
+
+## 2026-05-10 12:05 IST
+
+- Affected files: `test-assets/`, `docs/testing/`, `frontend-web/src/App.test.js`, `logs/`, `history/session-history.md`, `CHANGELOG.md`
+- Issue description: Project entered stabilization QA phase requiring complete validation, measurable outputs, screenshots, and reports.
+- Root cause: The project needed presentation-ready evidence beyond smoke logs.
+- Fix implemented: Added repeatable QA scripts, generated assets/results/screenshots, updated stale frontend test, produced reports, and appended project history.
+- Result after fix: All implemented backend tools passed automated validation; web build/test passed; Expo Android export passed.
+- Commands executed: `python .\test-assets\reports\run_full_qa.py`; `python .\test-assets\reports\generate_visuals.py`; `npm.cmd test -- --watchAll=false`; `npm.cmd run build`; `npx.cmd expo export --platform android --output-dir dist-qa`
+- Important observations: No product architecture was changed; QA artifacts were isolated under `test-assets/`.

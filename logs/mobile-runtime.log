@@ -1,0 +1,41 @@
+2026-05-10 Mobile runtime stabilization log
+
+- Added ErrorBoundary around the Expo app root.
+- Added startup diagnostics for API base, tool count, and selected initial tool.
+- Hardened API configuration so missing process.env cannot crash module evaluation.
+- Added console logging for upload selection, API requests, request failures, and share failures.
+- Current known crash target: mobile startup after API/env changes.
+- Primary suspected crash class: unsafe environment access during JS module import.
+- Clean Android export after fix: passed.
+- Fresh Expo LAN server after fix: port 8087, bundle served successfully.
+- Expo stderr after fix: empty.
+
+2026-05-10 11:34 IST Mobile documentation traceability entry
+
+- Affected files: `logs/mobile-runtime.log`, `docs/architecture/mobile-architecture.md`, `docs/debugging/debugging-timeline.md`
+- Issue description: Mobile runtime fixes need formal historical tracking for Expo, Metro, LAN, and physical-device debugging.
+- Root cause: Mobile runtime notes existed, but global append-only tracking rules were not yet documented.
+- Fix implemented: Added mobile architecture and debugging timeline references for future mobile fixes.
+- Result after fix: Future mobile runtime crashes and Expo/networking fixes have a required documentation path.
+- Commands executed: `Get-Content logs\mobile-runtime.log`
+- Important observations: Existing baseline reports clean Android export, Expo LAN server on port 8087, and empty Expo stderr.
+
+2026-05-10 12:05 IST Mobile QA validation entry
+
+- Affected files: `frontend-mobile/dist-qa/`, `docs/testing/mobile-testing-report.md`
+- Issue description: Expo mobile app needed stabilization-phase validation.
+- Root cause: Previous logs documented LAN runtime checks, but this QA pass needed a current export result.
+- Fix implemented: Ran Expo Android export with the configured `.env`.
+- Result after fix: Android bundle export passed and produced 21 files totaling approximately 5.88 MB.
+- Commands executed: `npx.cmd expo export --platform android --output-dir dist-qa`
+- Important observations: Physical mobile-device upload/download testing was not executed because no connected Expo Go device or `adb` was available.
+
+2026-05-10 12:20 IST Mobile production readiness entry
+
+- Affected files: `frontend-mobile/app.json`, `frontend-mobile/eas.json`, `frontend-mobile/.env.example`, `frontend-mobile/.env.production.example`, `frontend-mobile/assets/`
+- Issue description: Expo app needed production API config, EAS build config, and app branding assets.
+- Root cause: Mobile config still had local/LAN assumptions and no EAS profile file.
+- Fix implemented: Added EAS profiles, production env example, icon/splash/adaptive icon assets, app package name, and safer local fallback.
+- Result after fix: Expo Android export passed with production-style API environment variables.
+- Commands executed: `npx.cmd expo export --platform android --output-dir dist-qa`
+- Important observations: Physical-device validation remains required after a preview APK is built with EAS.

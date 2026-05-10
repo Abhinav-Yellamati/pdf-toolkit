@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="360" viewBox="0 0 1100 360">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="30" y="38" font-family="Arial" font-size="24" font-weight="700" fill="#111827">Original vs Compressed Size at Quality 55</text>
+<text x="30" y="91" font-family="Arial" font-size="13" fill="#374151">text-small.pdf</text>
+<rect x="250" y="74" width="0.4" height="14" rx="3" fill="#94a3b8"/>
+<text x="258.4" y="85" font-family="Arial" font-size="11" fill="#111827">0.03 MB</text>
+<rect x="250" y="91" width="0.1" height="14" rx="3" fill="#2563eb"/>
+<text x="258.1" y="102" font-family="Arial" font-size="11" fill="#111827">0.01 MB</text>
+<text x="30" y="135" font-family="Arial" font-size="13" fill="#374151">image-heavy-small.pdf</text>
+<rect x="250" y="118" width="24.3" height="14" rx="3" fill="#94a3b8"/>
+<text x="282.3" y="129" font-family="Arial" font-size="11" fill="#111827">1.81 MB</text>
+<rect x="250" y="135" width="1.5" height="14" rx="3" fill="#2563eb"/>
+<text x="259.5" y="146" font-family="Arial" font-size="11" fill="#111827">0.11 MB</text>
+<text x="30" y="179" font-family="Arial" font-size="13" fill="#374151">image-heavy-medium.pdf</text>
+<rect x="250" y="162" width="97.0" height="14" rx="3" fill="#94a3b8"/>
+<text x="355.0" y="173" font-family="Arial" font-size="11" fill="#111827">7.21 MB</text>
+<rect x="250" y="179" width="0.1" height="14" rx="3" fill="#2563eb"/>
+<text x="258.1" y="190" font-family="Arial" font-size="11" fill="#111827">0.01 MB</text>
+<text x="30" y="223" font-family="Arial" font-size="13" fill="#374151">image-heavy-large.pdf</text>
+<rect x="250" y="206" width="760.0" height="14" rx="3" fill="#94a3b8"/>
+<text x="1018.0" y="217" font-family="Arial" font-size="11" fill="#111827">56.54 MB</text>
+<rect x="250" y="223" width="35.7" height="14" rx="3" fill="#2563eb"/>
+<text x="293.7" y="234" font-family="Arial" font-size="11" fill="#111827">2.65 MB</text>
+<text x="30" y="267" font-family="Arial" font-size="13" fill="#374151">mixed-content.pdf</text>
+<rect x="250" y="250" width="24.4" height="14" rx="3" fill="#94a3b8"/>
+<text x="282.4" y="261" font-family="Arial" font-size="11" fill="#111827">1.81 MB</text>
+<rect x="250" y="267" width="0.1" height="14" rx="3" fill="#2563eb"/>
+<text x="258.1" y="278" font-family="Arial" font-size="11" fill="#111827">0.01 MB</text>
+<rect x="30" y="318" width="16" height="12" fill="#94a3b8"/>
+<text x="54" y="328" font-family="Arial" font-size="12" fill="#374151">original_mb</text>
+<rect x="200" y="318" width="16" height="12" fill="#2563eb"/>
+<text x="224" y="328" font-family="Arial" font-size="12" fill="#374151">compressed_mb</text>
+</svg>

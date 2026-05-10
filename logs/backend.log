@@ -1,0 +1,37 @@
+2026-05-10 Backend log summary
+
+- Backend configured to run on 0.0.0.0:8001 for LAN access.
+- Health endpoint verified over LAN.
+- Multipart upload endpoint /api/pdf/compress verified over LAN.
+- CORS preflight verified for mobile-origin style requests.
+- Latest compress smoke test returned HTTP 200 and generated a 446532-byte PDF.
+
+2026-05-10 11:34 IST Backend documentation traceability entry
+
+- Affected files: `logs/backend.log`, `docs/architecture/backend-architecture.md`, `docs/architecture/api-flow.md`
+- Issue description: Backend fixes and API changes need a dedicated chronological record connected to architecture docs.
+- Root cause: Backend runtime notes existed, but the required global maintenance rules were not yet formalized.
+- Fix implemented: Added backend architecture documentation and appended this baseline log entry.
+- Result after fix: Future FastAPI route, validation, file handling, cleanup, and PDF service changes have a required logging path.
+- Commands executed: `Get-Content logs\backend.log`, `Get-Content backend\app\main.py`, `Get-Content backend\app\routes\pdf.py`
+- Important observations: No backend code was changed during this documentation-only setup.
+
+2026-05-10 12:05 IST Backend full API QA entry
+
+- Affected files: `backend/app/`, `test-assets/reports/run_full_qa.py`, `test-assets/*-results/`, `docs/testing/backend-testing-report.md`
+- Issue description: All backend PDF APIs required direct validation with realistic PDFs and measured outputs.
+- Root cause: Existing smoke checks did not cover every tool with generated assets, page-count validation, invalid input, CORS, and concurrent uploads.
+- Fix implemented: Added and ran a repeatable FastAPI `TestClient` QA runner that generated assets and exercised all implemented PDF tools.
+- Result after fix: Compress, merge, rearrange, split, PDF-to-Word, PDF-to-image, image-to-PDF, text watermark, password protection, invalid upload, CORS, health, and concurrent upload tests passed.
+- Commands executed: `python .\test-assets\reports\run_full_qa.py`
+- Important observations: Image watermarking is not implemented in the current backend API; current `/watermark` supports text watermarking.
+
+2026-05-10 12:20 IST Backend production readiness entry
+
+- Affected files: `backend/app/main.py`, `backend/app/utils/files.py`, `backend/main.py`, `render.yaml`, `Procfile`, `backend/.env.production.example`
+- Issue description: Backend needed production-safe deployment behavior for Render.
+- Root cause: Local defaults allowed wildcard CORS and reload; security headers and readiness metadata were missing.
+- Fix implemented: Added restricted CORS defaults, production security headers, request timing logs, `/ready`, env-driven docs/log/upload settings, and Render startup configs.
+- Result after fix: Backend QA runner passed; `/health`, `/ready`, and `/docs` returned HTTP 200 locally.
+- Commands executed: `python .\test-assets\reports\run_full_qa.py`; FastAPI TestClient health/readiness/docs check.
+- Important observations: Final `CORS_ORIGINS` must be updated after Vercel/custom domains are known.

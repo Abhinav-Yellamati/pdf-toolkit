@@ -1,0 +1,36 @@
+2026-05-10 Frontend log summary
+
+- Web frontend API default aligned to http://127.0.0.1:8001/api/pdf.
+- Mobile frontend API configuration centralized in src/config/api.js.
+- Expo mobile startup now includes runtime diagnostics and error boundary fallback UI.
+- Fresh Expo server on port 8087 loaded .env and served the Android bundle successfully.
+
+2026-05-10 11:34 IST Frontend documentation traceability entry
+
+- Affected files: `logs/frontend.log`, `docs/architecture/frontend-architecture.md`, `docs/presentation/features.md`
+- Issue description: Frontend and mobile UI changes need explicit historical tracking.
+- Root cause: Existing frontend notes summarized recent fixes, but the required documentation/logging system was not complete.
+- Fix implemented: Added frontend architecture documentation and preserved this log for future UI/API-client updates.
+- Result after fix: Future React web and Expo UI changes should update this log, `CHANGELOG.md`, session history, and relevant docs.
+- Commands executed: `Get-Content logs\frontend.log`
+- Important observations: No new frontend code was changed during this documentation-only setup.
+
+2026-05-10 12:05 IST Frontend QA stabilization entry
+
+- Affected files: `frontend-web/src/App.test.js`, `frontend-web/build/`, `docs/testing/frontend-testing-report.md`
+- Issue description: Frontend Jest test failed during QA because it still expected the default Create React App `learn react` text.
+- Root cause: The generated placeholder test was not updated after the UI became the PDF Toolkit app shell.
+- Fix implemented: Updated the smoke test to assert `PDF Toolkit` and `9 tools live`.
+- Result after fix: `npm.cmd test -- --watchAll=false` passed; `npm.cmd run build` passed.
+- Commands executed: `npm.cmd test -- --watchAll=false`; `npm.cmd run build`
+- Important observations: Live browser screenshot automation was not available in this environment.
+
+2026-05-10 12:20 IST Frontend production readiness entry
+
+- Affected files: `frontend-web/src/services/api.js`, `frontend-web/public/index.html`, `frontend-web/public/manifest.json`, `frontend-web/vercel.json`, `frontend-web/.env.example`, `frontend-web/.env.production.example`
+- Issue description: React app needed Vercel-ready production metadata, API configuration, timeout handling, and deployment config.
+- Root cause: CRA metadata still used default values, and API config was local-development oriented.
+- Fix implemented: Added production metadata, branded manifest values, Vercel config, production env examples, and timeout-aware API requests.
+- Result after fix: `npm.cmd run build` and `npm.cmd test -- --watchAll=false` passed.
+- Commands executed: `npm.cmd run build`; `npm.cmd test -- --watchAll=false`
+- Important observations: Set `REACT_APP_API_BASE` in Vercel after the Render backend URL is available.

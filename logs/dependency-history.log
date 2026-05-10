@@ -1,0 +1,19 @@
+## 2026-05-10 11:34 IST
+
+- Affected files: `logs/dependency-history.log`
+- Issue description: Dependency installation/change history log required by the maintenance rules was missing.
+- Root cause: Dependency state existed in `package-lock.json`, `node_modules`, and backend virtual environment folders, but no dedicated chronological dependency log was present.
+- Fix implemented: Added this append-only dependency history log.
+- Result after fix: Future package installs, removals, upgrades, and compatibility fixes can be tracked with reason and outcome.
+- Commands executed: `Get-ChildItem -Recurse -Filter package.json`
+- Important observations: Installed dependency folders are present under `backend`, `frontend-web`, and `frontend-mobile`; future dependency changes should update this file and `CHANGELOG.md`.
+
+## 2026-05-10 12:05 IST
+
+- Affected files: `logs/dependency-history.log`
+- Issue description: QA required build/test execution but should not install or upgrade dependencies.
+- Root cause: Existing local dependencies were already present.
+- Fix implemented: Reused installed Python and Node dependencies; no dependency installation was performed.
+- Result after fix: Backend QA, React build/test, and Expo export completed without dependency changes.
+- Commands executed: `python ...`; `npm.cmd ...`; `npx.cmd ...`
+- Important observations: PowerShell execution policy required `.cmd` launchers for npm/npx.

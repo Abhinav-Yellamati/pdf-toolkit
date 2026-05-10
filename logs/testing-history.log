@@ -1,0 +1,39 @@
+## 2026-05-10 11:34 IST
+
+- Affected files: `logs/testing-history.log`, `logs/test-results.log`, `docs/testing/testing-report.md`
+- Issue description: Testing history log required by the project maintenance rules was missing.
+- Root cause: Test and smoke-test results were partially documented in runtime logs, but not centralized.
+- Fix implemented: Added this append-only testing history file and created a formal testing report.
+- Result after fix: API, web, mobile, Expo, and build validation can be recorded in one chronological stream.
+- Commands executed: `Get-Content logs\*.log`
+- Important observations: Existing logs report backend health HTTP 200, LAN compress HTTP 200, Android bundle HTTP 200, and empty Expo stderr after stabilization.
+
+## 2026-05-10 11:45 IST
+
+- Affected files: required log, changelog, history, presentation, debugging, testing, and architecture documentation paths.
+- Issue description: Needed to verify that the required documentation system was actually present in the project directory.
+- Root cause: Documentation paths were numerous, and some similarly named directories existed outside the project root.
+- Fix implemented: Ran `Test-Path` checks for every required file and listed project documentation/log files.
+- Result after fix: Every required file returned `OK` under `C:\Users\abhin\Downloads\pdf-project`.
+- Commands executed: `Test-Path`; `Get-ChildItem docs\presentation,docs\architecture,docs\testing,docs\debugging,changelog,history,logs -File -Recurse`
+- Important observations: No backend, web, or mobile runtime tests were executed because this session only changed documentation and logs.
+
+## 2026-05-10 12:05 IST
+
+- Affected files: `test-assets/`, `docs/testing/`, `frontend-web/src/App.test.js`, `logs/testing-history.log`, `logs/test-results.log`, `history/session-history.md`, `CHANGELOG.md`
+- Issue description: Full end-to-end QA validation was required for backend tools, web frontend, Expo mobile bundle, generated test assets, reports, screenshots, and measurable performance evidence.
+- Root cause: The project previously had smoke-test notes but did not have a complete generated QA asset set, repeatable backend test runner, full reports, or all-tool metrics.
+- Fix implemented: Created `test-assets/` folders, generated realistic text/image/scanned/mixed PDFs including a 56.54 MB large PDF, executed backend API tests for all implemented tools, ran web build/test, ran Expo Android export, generated visual comparison artifacts, and wrote testing reports.
+- Result after fix: Backend feature testing passed for 30 tool cases; web build passed; Jest smoke test passed after updating a stale assertion; Expo Android export passed; physical mobile-device testing remains pending due no connected device.
+- Commands executed: `python .\test-assets\reports\run_full_qa.py`; `python .\test-assets\reports\generate_visuals.py`; `npm.cmd run build`; `npm.cmd test -- --watchAll=false`; `npx.cmd expo export --platform android --output-dir dist-qa`
+- Important observations: Image watermarking is not implemented by the current API; text watermarking passed. Browser screenshot automation was unavailable because Playwright/Puppeteer and command-line browsers were not installed.
+
+## 2026-05-10 12:20 IST
+
+- Affected files: `docs/deployment/deployment-test-report.md`, `docs/deployment/production-verification-report.md`, deployment configs, backend/frontend/mobile production settings.
+- Issue description: Deployment-prepared project needed final local verification.
+- Root cause: Public deployment cannot be validated until provider credentials and live URLs exist.
+- Fix implemented: Ran local production-readiness checks for backend QA, backend health/readiness/docs, web build/test, and Expo Android export.
+- Result after fix: All local production-readiness checks passed; public URL verification remains pending.
+- Commands executed: `python .\test-assets\reports\run_full_qa.py`; `npm.cmd run build`; `npm.cmd test -- --watchAll=false`; `npx.cmd expo export --platform android --output-dir dist-qa`
+- Important observations: Update production reports after live Render/Vercel/Expo deployments are completed.

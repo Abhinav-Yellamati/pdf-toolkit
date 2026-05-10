@@ -1,0 +1,3 @@
+case,input,order,status,expected_pages,actual_pages,output_mb,seconds,valid
+rearrange-reverse-text-small.pdf,text-small.pdf,"8,7,6,5,4,3,2,1",200,8,8,0.067,0.082,True
+rearrange-mixed-selection.pdf,mixed-content.pdf,"2,4,6,1",200,4,4,1.81,0.127,True

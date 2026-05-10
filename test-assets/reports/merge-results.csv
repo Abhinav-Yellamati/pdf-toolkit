@@ -1,0 +1,4 @@
+case,inputs,status,expected_pages,actual_pages,page_order_valid,output_mb,seconds
+merge-2-pdfs.pdf,"text-small.pdf, mixed-content.pdf",200,14,14,True,1.879,0.172
+merge-multi-pdfs.pdf,"text-small.pdf, multi-page.pdf, scanned-sample.pdf",200,36,36,True,7.489,0.365
+merge-large-mixed.pdf,"image-heavy-medium.pdf, image-heavy-large.pdf",200,8,8,True,63.755,1.645

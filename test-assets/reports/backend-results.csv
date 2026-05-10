@@ -1,0 +1,4 @@
+case,status,seconds,observations
+invalid upload,400,0.006,"{""detail"":""Please upload a PDF file.""}"
+cors preflight,200,0,"{'vary': 'Origin', 'access-control-allow-methods': 'DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT', 'access-control-max-age': '600', 'access-control-allow-credentials': 'true', 'access-control-allow-origin': 'http://localhost:3000', 'content-length': '2', 'content-type': 'text/plain; charset=utf-8', 'x-content-type-options': 'nosniff', 'x-frame-options': 'DENY', 'referrer-policy': 'strict-origin-when-cross-origin', 'permissions-policy': 'camera=(), microphone=(), geolocation=()'}"
+health,200,0.006,"{""status"":""healthy""}"

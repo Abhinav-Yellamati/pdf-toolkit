@@ -1,0 +1,9 @@
+## 2026-05-10 12:20 IST
+
+- Affected files: `render.yaml`, `Procfile`, `backend/.env.production.example`, `frontend-web/vercel.json`, `frontend-web/.env.production.example`, `frontend-mobile/eas.json`, `frontend-mobile/.env.production.example`, `docs/deployment/`, `docs/production/`
+- Issue description: Project needed to move from localhost-only development toward production deployment readiness for web, backend, and mobile clients.
+- Root cause: Existing app functionality worked locally, but deployment manifests, production environment examples, security headers, production metadata, mobile EAS config, and deployment docs were incomplete.
+- Fix implemented: Added Render, Vercel, and EAS configs; added production env examples; added backend security headers and `/ready`; updated web metadata and API timeout handling; added mobile branding assets; added deployment and production docs.
+- Result after fix: Local production-readiness validation passed for backend QA, web build/test, and Expo Android export. Public deployment remains pending provider authentication.
+- Commands executed: `python .\test-assets\reports\run_full_qa.py`; `npm.cmd run build`; `npm.cmd test -- --watchAll=false`; `npx.cmd expo export --platform android --output-dir dist-qa`; FastAPI TestClient checks for `/health`, `/ready`, `/docs`
+- Important observations: Vercel, Render, and Expo live deployment cannot be completed from this environment without authenticated provider access and final production URLs.

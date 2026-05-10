@@ -1,0 +1,39 @@
+## 2026-05-10 11:34 IST
+
+- Affected files: `logs/test-results.log`
+- Issue description: Required raw test results log was missing.
+- Root cause: Previous validation outcomes were distributed across `logs/backend.log`, `logs/mobile-runtime.log`, and `logs/api-errors.log`.
+- Fix implemented: Added this append-only test results log.
+- Result after fix: Future command outputs and concise pass/fail results can be recorded here without overwriting earlier runs.
+- Commands executed: `Get-Content logs\backend.log`, `Get-Content logs\mobile-runtime.log`, `Get-Content logs\api-errors.log`
+- Important observations: Baseline evidence from existing logs: `GET /health` returned 200; `POST /api/pdf/compress` returned 200; Metro served Android bundle with HTTP 200.
+
+## 2026-05-10 11:45 IST - Documentation Path Verification
+
+- Result: Passed.
+- Scope: Verified required documentation/logging files exist in `C:\Users\abhin\Downloads\pdf-project`.
+- Commands executed: `Test-Path` for all required files; `Get-ChildItem -File -Recurse` for documentation directories.
+- Notes: No application test suite was run in this documentation-only session.
+
+## 2026-05-10 12:05 IST - Full System QA Results
+
+- Result: Passed with documented limitations.
+- Backend feature cases: 30 successful tool cases across compress, merge, rearrange, split, PDF-to-Word, PDF-to-image, image-to-PDF, text watermark, and password protection.
+- Backend validation cases: invalid upload returned HTTP 400, CORS preflight returned HTTP 200, health returned HTTP 200, and 8/8 concurrent compression requests returned HTTP 200.
+- Large asset: `test-assets/sample-pdfs/image-heavy-large.pdf`, 56.54 MB, 4 pages.
+- Compression highlight: 56.54 MB PDF compressed to 2.653 MB at quality 55, 95.31% reduction.
+- Web build: `npm.cmd run build` passed.
+- Web test: `npm.cmd test -- --watchAll=false` passed after updating stale `App.test.js`.
+- Mobile export: `npx.cmd expo export --platform android --output-dir dist-qa` passed and produced 21 files totaling approximately 5.88 MB.
+- Limitations: Physical mobile-device testing and live browser screenshots were not executed because no connected device/browser automation was available.
+
+## 2026-05-10 12:20 IST - Production Readiness Verification
+
+- Backend QA: passed with 56.54 MB largest asset and all implemented PDF tools succeeding.
+- Backend health: `/health` returned HTTP 200.
+- Backend readiness: `/ready` returned HTTP 200.
+- Backend docs: `/docs` returned HTTP 200.
+- Web build: `npm.cmd run build` passed with production-style API env.
+- Web test: `npm.cmd test -- --watchAll=false` passed.
+- Mobile export: `npx.cmd expo export --platform android --output-dir dist-qa` passed with production-style API env.
+- Public deployment: not executed because Vercel, Render, and Expo authentication is required.

@@ -1,0 +1,38 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "http://127.0.0.1:8001/api/pdf",
+        "EXPO_PUBLIC_API_TIMEOUT_MS": "120000"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://your-render-api.onrender.com/api/pdf",
+        "EXPO_PUBLIC_API_TIMEOUT_MS": "120000"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://your-render-api.onrender.com/api/pdf",
+        "EXPO_PUBLIC_API_TIMEOUT_MS": "120000"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

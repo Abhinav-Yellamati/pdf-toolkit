@@ -1,0 +1,4 @@
+case,status,output,output_mb,seconds,observations
+/api/pdf/pdf-to-word,200,mixed-content.docx,0.001,0.079,File generated
+/api/pdf/pdf-to-image,200,mixed-content-images.zip,13.716,1.911,"page_1.png, page_2.png, page_3.png, page_4.png, page_5.png, page_6.png"
+/api/pdf/image-to-pdf,200,images-to-pdf.pdf,9.019,0.725,pages=2
