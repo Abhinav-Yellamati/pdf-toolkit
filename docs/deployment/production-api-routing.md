@@ -18,16 +18,35 @@ The web frontend must call the deployed Render backend, not a local development 
 Vercel:
 
 ```text
-REACT_APP_API_BASE=https://your-render-service.onrender.com/api/pdf
+REACT_APP_API_BASE=https://pdf-toolkit-backend.onrender.com/api/pdf
+REACT_APP_API_ORIGIN=https://pdf-toolkit-backend.onrender.com
+REACT_APP_API_URL=https://pdf-toolkit-backend.onrender.com
 REACT_APP_API_TIMEOUT_MS=120000
 ```
 
 Render:
 
 ```text
-CORS_ORIGINS=https://your-vercel-app.vercel.app,https://your-custom-domain.com
+ENVIRONMENT=production
+LOG_LEVEL=INFO
+ENABLE_DOCS=1
+MAX_FILE_MB=100
+CORS_ORIGINS=https://pdf-toolkit-black-ten.vercel.app
 CORS_ORIGIN_REGEX=https://.*\.vercel\.app
 ```
+
+## Correct Render Boot Target
+
+Use one deployment shape only:
+
+```text
+Root Directory: backend
+Build Command: pip install -r requirements.txt
+Start Command: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+Health Check Path: /health
+```
+
+With this root directory, `app.main:app` resolves to `backend/app/main.py`. The repository-root target `backend.app.main:app` exists only as a compatibility fallback for services that cannot set Root Directory.
 
 ## Verification
 

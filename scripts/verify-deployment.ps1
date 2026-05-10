@@ -1,7 +1,7 @@
 param(
   [string]$ApiBase = $env:RENDER_API_BASE,
   [string]$ApiOrigin = $env:RENDER_API_ORIGIN,
-  [string]$SamplePdf = "backend/uploads/RetinalBloodFlowSimulation_Abhinav_2203140_REPORT.pdf",
+  [string]$SamplePdf = "test-assets/sample-pdfs/text-small.pdf",
   [string]$OutputDir = "logs/deployment-smoke"
 )
 
@@ -48,6 +48,30 @@ function Resolve-ApiBase {
   return "$origin/api/pdf"
 }
 
+function Resolve-ApiOrigin([string]$ResolvedBase) {
+  if ($ApiOrigin) {
+    return Trim-Slash $ApiOrigin
+  }
+
+  $uri = [Uri]$ResolvedBase
+  return $uri.GetLeftPart([System.UriPartial]::Authority)
+}
+
+function Invoke-StatusCheck([string]$Name, [string]$Url, [int[]]$ExpectedStatuses = @(200)) {
+  try {
+    $statusText = curl.exe -sS -L --max-time 60 -o NUL -w "%{http_code}" $Url
+    $statusCode = [int]$statusText
+  } catch {
+    $statusCode = 0
+  }
+
+  [PSCustomObject]@{
+    Endpoint = $Name
+    Status = $statusCode
+    Passed = $ExpectedStatuses -contains $statusCode
+  }
+}
+
 function Invoke-ToolSmoke([string]$Name, [string[]]$CurlArgs) {
   $status = curl.exe -sS -w "%{http_code}" @CurlArgs
   [PSCustomObject]@{
@@ -58,6 +82,7 @@ function Invoke-ToolSmoke([string]$Name, [string[]]$CurlArgs) {
 }
 
 $resolvedBase = Resolve-ApiBase
+$resolvedOrigin = Resolve-ApiOrigin $resolvedBase
 $root = Resolve-Path "."
 $sample = Resolve-Path $SamplePdf
 $out = New-Item -ItemType Directory -Force -Path $OutputDir
@@ -77,16 +102,26 @@ $tests = @(
   @{ Name = "protect"; Args = @("-F", "file=@$sample;type=application/pdf", "-F", "password=test1234", "$resolvedBase/protect", "-o", (Join-Path $out.FullName "protect.pdf")) }
 )
 
-$results = foreach ($test in $tests) {
+$statusChecks = @(
+  Invoke-StatusCheck -Name "health" -Url "$resolvedOrigin/health"
+  Invoke-StatusCheck -Name "docs" -Url "$resolvedOrigin/docs"
+  Invoke-StatusCheck -Name "openapi" -Url "$resolvedOrigin/openapi.json"
+  Invoke-StatusCheck -Name "api-meta" -Url "$resolvedOrigin/api/meta"
+)
+
+$toolResults = foreach ($test in $tests) {
   Invoke-ToolSmoke -Name $test.Name -CurlArgs $test.Args
 }
 
+$results = @($statusChecks) + @($toolResults)
 $logPath = "logs/deployment-verification.md"
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss K"
 $lines = @(
   "# Deployment Verification Log";
   "";
   "Generated: $timestamp";
+  "";
+  "Resolved API origin: $resolvedOrigin";
   "";
   "Resolved API base: $resolvedBase";
   "";

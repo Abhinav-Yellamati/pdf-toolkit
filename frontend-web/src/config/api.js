@@ -1,6 +1,6 @@
 const PRODUCTION_API_ORIGIN = "https://pdf-toolkit-backend.onrender.com";
 const PRODUCTION_API_BASE = `${PRODUCTION_API_ORIGIN}/api/pdf`;
-const LOCAL_API_BASE = "http://127.0.0.1:8001/api/pdf";
+const LOCAL_API_BASE = PRODUCTION_API_BASE;
 const API_PREFIX_CANDIDATES = ["/api/pdf", "/pdf", "/api"];
 
 function env(name) {
@@ -13,7 +13,7 @@ function trimTrailingSlash(value) {
 }
 
 function isPlaceholder(value) {
-  return /your-|example\.com|localhost-placeholder/i.test(value);
+  return /your-|example\.com/i.test(value);
 }
 
 function normalizeBaseUrl(value) {
@@ -32,6 +32,9 @@ function resolveConfiguredBase() {
 
   const explicitOrigin = normalizeBaseUrl(env("REACT_APP_API_ORIGIN"));
   if (explicitOrigin) return `${explicitOrigin}/api/pdf`;
+
+  const legacyExplicitOrigin = normalizeBaseUrl(env("REACT_APP_API_URL"));
+  if (legacyExplicitOrigin) return `${legacyExplicitOrigin}/api/pdf`;
 
   if (env("NODE_ENV") === "production") {
     return productionFallback();

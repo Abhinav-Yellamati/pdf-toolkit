@@ -1,0 +1,59 @@
+2026-05-11 01:27 IST - Public access validation
+
+Public frontend:
+- https://pdf-toolkit-black-ten.vercel.app
+- Reachable from this environment: yes, HTTP 200.
+- UI bundle contains Render backend URL: yes.
+
+Public backend before redeploy:
+- https://pdf-toolkit-backend.onrender.com/docs: 404.
+- https://pdf-toolkit-backend.onrender.com/openapi.json: 404.
+- https://pdf-toolkit-backend.onrender.com/api/pdf/compress: 404 or connection reset depending on method.
+- Required result: not yet public-usable until Render is redeployed with the corrected FastAPI start command.
+
+Local/current-source validation:
+- /health: 200.
+- /docs: 200.
+- /openapi.json: 200.
+- /api/meta: 200.
+- /api/pdf/compress: 200.
+- /api/pdf/merge: 200.
+- /api/pdf/split: 200.
+- /api/pdf/rearrange: 200.
+- /api/pdf/pdf-to-word: 200.
+- /api/pdf/pdf-to-image: 200.
+- /api/pdf/image-to-pdf: 200.
+- /api/pdf/watermark: 200.
+- /api/pdf/protect: 200.
+
+Validation conclusion:
+- The codebase is fixed.
+- Render must be redeployed or its service settings corrected to use this FastAPI app.
+- Final source verification: React production build passed, backend compile passed, Vercel production and preview CORS preflights passed under TestClient.
+
+2026-05-11 02:02 IST - Render startup validation added
+
+Local/current-source validation after startup validation:
+- /health: 200.
+- /docs: 200.
+- /openapi.json: 200.
+- /api/meta: 200.
+- All 9 /api/pdf/* POST endpoints: 200.
+
+Required public URLs after redeploy:
+- https://pdf-toolkit-backend.onrender.com/health
+- https://pdf-toolkit-backend.onrender.com/docs
+- https://pdf-toolkit-backend.onrender.com/openapi.json
+- https://pdf-toolkit-backend.onrender.com/api/meta
+- https://pdf-toolkit-backend.onrender.com/api/pdf/compress
+
+If any of the first three URLs still returns 404 after applying the exact Render settings and redeploying the latest commit, the current Render service is stale or connected incorrectly. Delete it and create a new Web Service from the current repository.
+
+2026-05-11 02:05 IST - Live Render recheck from this environment
+
+- `https://pdf-toolkit-backend.onrender.com/health`: connection reset.
+- `https://pdf-toolkit-backend.onrender.com/docs`: timed out with no response.
+
+Conclusion:
+- The live Render service is still not publicly usable at this moment.
+- The local source is valid; the remaining blocker is Render dashboard configuration/redeployment or a stale/wrong Render service.

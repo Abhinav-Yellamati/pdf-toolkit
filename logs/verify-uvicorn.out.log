@@ -1,0 +1,14 @@
+INFO:     127.0.0.1:63996 - "GET /api/meta HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63997 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63998 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63999 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64000 - "GET /api/meta HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64001 - "POST /api/pdf/compress HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64002 - "POST /api/pdf/merge HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64003 - "POST /api/pdf/split HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64004 - "POST /api/pdf/rearrange HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64005 - "POST /api/pdf/pdf-to-word HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64006 - "POST /api/pdf/pdf-to-image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64007 - "POST /api/pdf/image-to-pdf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64008 - "POST /api/pdf/watermark HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64009 - "POST /api/pdf/protect HTTP/1.1" 200 OK

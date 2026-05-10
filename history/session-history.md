@@ -88,3 +88,65 @@
 ### Architectural Decisions
 - Kept the existing FastAPI/React/Expo architecture intact.
 - Prepared deployment through provider config files instead of introducing a new hosting layer.
+
+## 2026-05-11 01:27 IST - Public Production Routing Fix
+
+### Completed Tasks
+- Tested the live Vercel frontend and confirmed it is publicly reachable.
+- Inspected the deployed Vercel JavaScript bundle and confirmed it references `https://pdf-toolkit-backend.onrender.com`.
+- Tested the live Render backend and confirmed `/docs`, `/openapi.json`, and `/api/pdf/*` are not serving the current FastAPI app.
+- Added root-level deployment compatibility with `main.py`, `requirements.txt`, and `backend/__init__.py`.
+- Converted backend imports to package-relative imports so both root-level and backend-root uvicorn targets work.
+- Updated `Procfile`, `render.yaml`, backend CORS defaults, and frontend production API fallback.
+- Added production network debug logs, public access validation logs, route map, API test report, and public deployment fix docs.
+
+### Fixes
+- Fixed production frontend fallback so missing Vercel API env vars still target Render, not Vercel itself.
+- Added compatibility for `REACT_APP_API_URL`, which exists in the current deployed Vercel environment.
+- Fixed backend import-path portability for Render root directory ambiguity.
+- Made CORS allow the production Vercel domain and Vercel preview deployments by default.
+
+### Verification
+- Current source exposes `/health`, `/docs`, `/openapi.json`, `/api/meta`, and all 9 `/api/pdf/*` routes with HTTP 200 under FastAPI TestClient.
+- React production build succeeds.
+- Root-level and backend-root imports both resolve `PDF Toolkit API`.
+
+### Pending Manual Action
+- Redeploy the Render backend using the corrected repository and start command.
+- Redeploy the Vercel frontend after pushing these changes.
+
+## 2026-05-11 02:02 IST - Render Startup Stabilization
+
+### Completed Tasks
+- Re-inspected production deployment entrypoints: `render.yaml`, root `Procfile`, root `main.py`, `backend/main.py`, `backend/app/main.py`, backend package files, requirements, frontend API config, and centralized API client.
+- Confirmed the current source has no Flask or gunicorn dependency/startup path in deployable backend files.
+- Confirmed production-loaded frontend/backend source files no longer contain localhost or `127.0.0.1` API fallbacks.
+- Added explicit FastAPI startup diagnostics for app identity, environment mode, docs state, CORS, mounted router prefix, PDF routes, and public route map.
+- Added startup validation that raises a runtime error if required public backend routes are absent.
+- Normalized the root `Procfile` port syntax to Render's `$PORT`.
+
+### Verification
+- `python -m py_compile main.py backend\main.py backend\app\main.py backend\app\routes\pdf.py` passed.
+- Root import `backend.app.main:app` and backend-root import `app.main:app` both resolve `PDF Toolkit API`.
+- FastAPI TestClient returned HTTP 200 for `/health`, `/docs`, `/openapi.json`, `/api/meta`, and all 9 `/api/pdf/*` POST endpoints.
+- Startup logs now print route registration and will visibly prove whether Render is running this app after redeploy.
+
+### Root Cause
+- The live Render service still returning Flask-style 404s for `/health`, `/docs`, and `/openapi.json` means Render is not running the current FastAPI ASGI app.
+- The single correct Render setup is root directory `backend` with start command `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
+- If those settings are applied and the live service still returns 404 after a manual redeploy from the latest commit, the current Render service should be deleted and recreated because it is serving a stale or wrong application configuration.
+
+## 2026-05-11 02:20 IST - Deployment Verifier Hardening
+
+### Completed Tasks
+- Added explicit `pydantic` to `backend/requirements.txt`.
+- Added `scripts/verify-backend-structure.ps1` to audit deployment-critical files, requirements, Render command, Procfile command, and FastAPI route registration.
+- Updated `scripts/verify-deployment.ps1` to verify `/health`, `/docs`, `/openapi.json`, `/api/meta`, and all 9 PDF endpoints.
+- Fixed deployment verifier origin parsing so hosts with explicit ports are preserved during local validation.
+- Replaced PowerShell status checks with `curl.exe` status checks for reliable HTTP code capture.
+
+### Verification
+- `scripts/verify-backend-structure.ps1` passed and printed the expected route map.
+- Root import `backend.app.main:app` and backend-root import `app.main:app` both resolve.
+- Exact Render working-directory command `python -m uvicorn app.main:app --host 127.0.0.1 --port 8021` returned 200 for `/health`, `/docs`, and `/openapi.json`.
+- Full deployment verifier passed against a local uvicorn server for health, docs, OpenAPI, metadata, and all 9 PDF tools.

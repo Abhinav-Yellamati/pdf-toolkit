@@ -7,6 +7,11 @@ The format follows Keep a Changelog style. Dates use `YYYY-MM-DD`.
 ## [Unreleased]
 
 ### Added
+- Added `scripts/verify-backend-structure.ps1` to audit deployment files, package declarations, startup commands, and required FastAPI routes.
+- Added FastAPI startup diagnostics that log the app object, environment, docs state, CORS configuration, mounted routers, and registered routes.
+- Added startup route validation so the backend fails loudly if `/health`, `/docs`, `/openapi.json`, `/api/meta`, or any `/api/pdf/*` route is missing.
+- Added root-level Render-compatible FastAPI entrypoint and requirements forwarding for deployment-root ambiguity.
+- Added public deployment debugging logs, route map, and API test reports.
 - Added `scripts/verify-deployment.ps1` to detect deployed FastAPI route prefixes and validate all 9 PDF endpoints.
 - Added `logs/deployment-verification.md` with endpoint verification results.
 - Added `docs/deployment/production-api-routing.md` documenting Render/Vercel API routing configuration.
@@ -21,6 +26,10 @@ The format follows Keep a Changelog style. Dates use `YYYY-MM-DD`.
 - Added Expo app icon, adaptive icon, and splash assets.
 
 ### Changed
+- Updated `scripts/verify-deployment.ps1` to validate `/health`, `/docs`, `/openapi.json`, `/api/meta`, and all 9 PDF tool endpoints.
+- Added explicit `pydantic` dependency to `backend/requirements.txt`.
+- Updated Render and Vercel production configuration to use the real public URLs.
+- Converted backend imports to package-relative imports so both root and backend uvicorn module paths work.
 - Updated web and backend environment examples for `REACT_APP_API_ORIGIN`, `REACT_APP_API_BASE`, and `CORS_ORIGIN_REGEX`.
 - Consolidated project maintenance expectations into a formal logging policy under `changelog/README.md`.
 - Updated the web frontend smoke test to assert the current PDF Toolkit app shell instead of the default Create React App placeholder.
@@ -28,6 +37,11 @@ The format follows Keep a Changelog style. Dates use `YYYY-MM-DD`.
 - Changed web and mobile API configuration examples from LAN/local-only values to production-ready URL placeholders.
 
 ### Fixed
+- Fixed the root `Procfile` to use Render's provided `$PORT` directly with the root-compatible FastAPI ASGI target.
+- Fixed production frontend fallback so Vercel builds without API env vars still call `https://pdf-toolkit-backend.onrender.com/api/pdf`.
+- Fixed compatibility with the deployed Vercel `REACT_APP_API_URL` environment variable.
+- Fixed Render deployment ambiguity by supporting both `backend.app.main:app` and `app.main:app` startup paths.
+- Removed localhost fallbacks from production-loaded web/backend runtime defaults.
 - Fixed production web API routing by introducing a centralized frontend API client with FastAPI route-prefix discovery.
 - Replaced direct hardcoded frontend upload URLs with environment-aware API base resolution.
 - Added backend `/api/meta` route metadata for deployment clients and verification tooling.

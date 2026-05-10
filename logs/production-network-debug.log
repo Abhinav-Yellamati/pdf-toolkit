@@ -1,0 +1,61 @@
+2026-05-11 01:27 IST - Production network debug
+
+Frontend:
+- URL: https://pdf-toolkit-black-ten.vercel.app
+- Status from this environment: reachable, HTTP 200.
+- Deployed JS bundle contains backend origin: https://pdf-toolkit-backend.onrender.com.
+
+Backend:
+- URL: https://pdf-toolkit-backend.onrender.com
+- Expected FastAPI endpoints: /health, /docs, /openapi.json, /api/meta, /api/pdf/*
+- Observed deployed behavior before redeploy:
+  - /docs: HTTP 404, Flask-style HTML response.
+  - /openapi.json: HTTP 404, Flask-style HTML response.
+  - /api/pdf/compress: HTTP 404 for GET, connection reset for some POST/OPTIONS attempts.
+  - /health: connection reset from this network check.
+  - Response header included x-render-origin-server: gunicorn.
+
+Root cause:
+- Render is not launching the current FastAPI ASGI app from this repository.
+- The current source exposes all required routes locally, but the deployed Render service is serving a different or stale WSGI/Gunicorn app.
+
+Fixes applied:
+- Added root-level main.py exposing backend.app.main:app.
+- Added root-level requirements.txt pointing to backend/requirements.txt.
+- Added backend/__init__.py for package imports.
+- Made backend imports package-relative so both app.main:app and backend.app.main:app work.
+- Updated Procfile to run python -m uvicorn backend.app.main:app from repo root.
+- Updated render.yaml startCommand to python -m uvicorn app.main:app when Render rootDir is backend.
+- Updated Render CORS defaults for https://pdf-toolkit-black-ten.vercel.app and Vercel previews.
+- Updated frontend production fallback to always use https://pdf-toolkit-backend.onrender.com/api/pdf.
+- Added REACT_APP_API_URL compatibility because deployed Vercel currently exposes that env var.
+- Removed localhost literals from production-loaded frontend/backend runtime defaults.
+
+2026-05-11 02:02 IST - Render startup stabilization follow-up
+
+Additional inspection:
+- No deployable backend source file contains Flask or gunicorn startup code.
+- `render.yaml` is configured for `rootDir: backend`.
+- With `rootDir: backend`, the correct ASGI target is `app.main:app`.
+- With repository root as the working directory, the compatible fallback target is `backend.app.main:app`.
+- The root `Procfile` now uses `python -m uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`.
+
+Local proof:
+- `/health`: 200
+- `/docs`: 200
+- `/openapi.json`: 200
+- `/api/meta`: 200
+- `/api/pdf/compress`: 200
+- `/api/pdf/merge`: 200
+- `/api/pdf/split`: 200
+- `/api/pdf/rearrange`: 200
+- `/api/pdf/pdf-to-word`: 200
+- `/api/pdf/pdf-to-image`: 200
+- `/api/pdf/image-to-pdf`: 200
+- `/api/pdf/watermark`: 200
+- `/api/pdf/protect`: 200
+
+Final diagnosis:
+- A live 404 at `https://pdf-toolkit-backend.onrender.com/health`, `/docs`, and `/openapi.json` cannot be produced by the current FastAPI source when launched with the documented uvicorn command.
+- Render is therefore serving a stale deployment, the wrong branch/repository, or a manually configured wrong start command/root directory.
+- If the exact Render settings are applied and a manual redeploy still serves 404, delete the existing Render service and create a new Web Service from the current repository.

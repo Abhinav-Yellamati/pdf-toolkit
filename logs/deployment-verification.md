@@ -1,17 +1,23 @@
 ﻿# Deployment Verification Log
 
-Generated: 2026-05-11 01:08:42 +05:30
+Generated: 2026-05-11 02:19:41 +05:30
 
-Resolved API base: https://pdf-toolkit-backend.onrender.com/api/pdf
+Resolved API origin: http://127.0.0.1:8020
+
+Resolved API base: http://127.0.0.1:8020/api/pdf
 
 | Endpoint | Status | Passed |
 | --- | --- | --- |
-| compress | 404 | False |
-| merge | 404 | False |
-| split | 000 | False |
-| rearrange | 404 | False |
-| pdf-to-word | 000 | False |
-| pdf-to-image | 000 | False |
-| image-to-pdf | 000 | False |
-| watermark | 000 | False |
-| protect | 404 | False |
+| health | 200 | True |
+| docs | 200 | True |
+| openapi | 200 | True |
+| api-meta | 200 | True |
+| compress | 200 | True |
+| merge | 200 | True |
+| split | 200 | True |
+| rearrange | 200 | True |
+| pdf-to-word | 200 | True |
+| pdf-to-image | 200 | True |
+| image-to-pdf | 200 | True |
+| watermark | 200 | True |
+| protect | 200 | True |

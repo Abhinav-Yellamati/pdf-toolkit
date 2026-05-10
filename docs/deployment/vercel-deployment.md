@@ -44,4 +44,24 @@ REACT_APP_API_TIMEOUT_MS=120000
 ## Custom Domain
 
 In Vercel, add the domain under Project Settings -> Domains. After the domain is active, add it to backend `CORS_ORIGINS` on Render.
+# Required Current Vercel Settings
 
+Use these exact values for the production frontend:
+
+```text
+Root Directory: frontend-web
+Build Command: npm run build
+Output Directory: build
+Install Command: npm install
+```
+
+Required environment variables:
+
+```text
+REACT_APP_API_BASE=https://pdf-toolkit-backend.onrender.com/api/pdf
+REACT_APP_API_ORIGIN=https://pdf-toolkit-backend.onrender.com
+REACT_APP_API_URL=https://pdf-toolkit-backend.onrender.com
+REACT_APP_API_TIMEOUT_MS=120000
+```
+
+The frontend bundle can only work after the Render backend exposes `/health`, `/docs`, `/openapi.json`, and `/api/pdf/*`. If those backend URLs return 404, fix Render first; redeploying Vercel alone cannot resolve PDF tool failures.

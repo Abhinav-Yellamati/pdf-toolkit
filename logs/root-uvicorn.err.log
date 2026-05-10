@@ -1,0 +1,6 @@
+INFO:     Started server process [1000]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8011 (Press CTRL+C to quit)
+2026-05-11 01:25:46,752 INFO pdf_toolkit GET /health -> 200 0.86ms
+2026-05-11 01:25:46,793 INFO pdf_toolkit GET /openapi.json -> 200 17.05ms

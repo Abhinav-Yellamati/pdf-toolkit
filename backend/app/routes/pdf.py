@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 from starlette.background import BackgroundTask
 from starlette.concurrency import run_in_threadpool
 
-from app.services.pdf_service import (
+from ..services.pdf_service import (
     add_watermark,
     compress_pdf,
     convert_images_to_pdf,
@@ -16,8 +16,8 @@ from app.services.pdf_service import (
     rearrange_pdf,
     split_pdf,
 )
-from app.utils.files import cleanup_paths, prepare_workspace, save_upload, save_uploads
-from app.utils.validation import validate_image_files, validate_pdf_file, validate_pdf_files
+from ..utils.files import cleanup_paths, prepare_workspace, save_upload, save_uploads
+from ..utils.validation import validate_image_files, validate_pdf_file, validate_pdf_files
 
 router = APIRouter()
 

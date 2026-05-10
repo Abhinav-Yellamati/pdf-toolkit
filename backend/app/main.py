@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.routes.pdf import router as pdf_router
+from .routes.pdf import router as pdf_router
 
 logger = logging.getLogger("pdf_toolkit")
 logging.basicConfig(
@@ -18,7 +18,7 @@ cors_origins = [
     origin.strip()
     for origin in os.getenv(
         "CORS_ORIGINS",
-        "http://localhost:3000,http://127.0.0.1:3000",
+        "https://pdf-toolkit-black-ten.vercel.app",
     ).split(",")
     if origin.strip()
 ]
@@ -29,6 +29,24 @@ cors_origin_regex = os.getenv(
 allow_all_origins = "*" in cors_origins
 environment = os.getenv("ENVIRONMENT", "development").lower()
 docs_enabled = os.getenv("ENABLE_DOCS", "1") == "1"
+PDF_ROUTE_PREFIX = "/api/pdf"
+REQUIRED_PUBLIC_ROUTES = {
+    "/",
+    "/health",
+    "/ready",
+    "/api/meta",
+    "/docs",
+    "/openapi.json",
+    f"{PDF_ROUTE_PREFIX}/compress",
+    f"{PDF_ROUTE_PREFIX}/merge",
+    f"{PDF_ROUTE_PREFIX}/split",
+    f"{PDF_ROUTE_PREFIX}/rearrange",
+    f"{PDF_ROUTE_PREFIX}/pdf-to-word",
+    f"{PDF_ROUTE_PREFIX}/pdf-to-image",
+    f"{PDF_ROUTE_PREFIX}/image-to-pdf",
+    f"{PDF_ROUTE_PREFIX}/watermark",
+    f"{PDF_ROUTE_PREFIX}/protect",
+}
 
 app = FastAPI(
     title="PDF Toolkit API",
@@ -119,4 +137,35 @@ async def api_meta():
     }
 
 
-app.include_router(pdf_router, prefix="/api/pdf", tags=["PDF Tools"])
+app.include_router(pdf_router, prefix=PDF_ROUTE_PREFIX, tags=["PDF Tools"])
+
+
+def _registered_route_paths():
+    return sorted({getattr(route, "path", "") for route in app.routes if getattr(route, "path", "")})
+
+
+def _registered_pdf_routes():
+    return [path for path in _registered_route_paths() if path.startswith(PDF_ROUTE_PREFIX)]
+
+
+def _validate_required_routes():
+    route_paths = set(_registered_route_paths())
+    missing_routes = sorted(REQUIRED_PUBLIC_ROUTES - route_paths)
+    if missing_routes:
+        logger.critical("FastAPI startup validation failed. Missing routes: %s", missing_routes)
+        raise RuntimeError(f"PDF Toolkit API route registration failed: missing {missing_routes}")
+
+
+@app.on_event("startup")
+async def startup_diagnostics():
+    route_paths = _registered_route_paths()
+    _validate_required_routes()
+    logger.info("PDF Toolkit FastAPI app started successfully")
+    logger.info("App object: backend.app.main:app or app.main:app")
+    logger.info("Environment mode: %s", environment)
+    logger.info("Docs enabled: %s", docs_enabled)
+    logger.info("CORS origins: %s", "*" if allow_all_origins else cors_origins)
+    logger.info("CORS origin regex: %s", None if allow_all_origins else cors_origin_regex)
+    logger.info("Registered routers: PDF router mounted at %s", PDF_ROUTE_PREFIX)
+    logger.info("Registered PDF routes: %s", _registered_pdf_routes())
+    logger.info("Registered public routes: %s", route_paths)
