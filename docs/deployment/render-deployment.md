@@ -1,4 +1,4 @@
-# Render Deployment
+﻿# Render Deployment
 
 ## Required Current Render Settings
 
@@ -17,6 +17,7 @@ Required environment variables:
 
 ```text
 ENVIRONMENT=production
+PYTHON_VERSION=3.12.8
 LOG_LEVEL=INFO
 ENABLE_DOCS=1
 MAX_FILE_MB=100
@@ -33,7 +34,9 @@ Build Command: pip install -r requirements.txt
 Start Command: python -m uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
 ```
 
-Do not use gunicorn, Flask, `main:app`, or `backend.main:app` for this deployment.
+Do not use Node, Express, gunicorn, Flask, `main:app`, or `backend.main:app` for this deployment.
+
+The backend directory intentionally has no `package.json`. If Render shows the service runtime as Node, delete the service and recreate it as a Python Web Service.
 
 ## Purpose
 
@@ -92,12 +95,12 @@ powershell -ExecutionPolicy Bypass -File scripts/verify-backend-structure.ps1
 Run the public deployment verifier after Render redeploys:
 
 ```powershell
-$env:RENDER_API_ORIGIN="https://pdf-toolkit-backend.onrender.com"
+$env:RENDER_API_ORIGIN="https://pdf-toolkit-api.onrender.com"
 powershell -ExecutionPolicy Bypass -File scripts/verify-deployment.ps1
 ```
 ## Live 404 Diagnosis
 
-If `https://pdf-toolkit-backend.onrender.com/health`, `/docs`, and `/openapi.json` return 404, Render is not running the current FastAPI app. The current source exposes those routes locally and startup validation now fails loudly if they are absent.
+If `https://pdf-toolkit-api.onrender.com/health`, `/docs`, and `/openapi.json` return 404, Render is not running the current FastAPI app. The current source exposes those routes locally and startup validation now fails loudly if they are absent.
 
 After redeploy, Render logs must include:
 
@@ -110,3 +113,17 @@ Registered public routes: [...]
 ```
 
 If these lines do not appear, check the service branch, root directory, build command, start command, and whether the service is connected to the correct repository. If all values are correct and 404s continue after "Clear build cache and deploy", delete the Render service and create a new one.
+
+## Express `Cannot GET` Diagnosis
+
+If the live response contains:
+
+```text
+x-powered-by: Express
+Cannot GET /health
+Cannot GET /docs
+Cannot GET /openapi.json
+```
+
+Render is running Node/Express. That is not this backend. Fix it by creating a Python 3 Web Service or changing the existing service to use the Python runtime with the exact settings above.
+

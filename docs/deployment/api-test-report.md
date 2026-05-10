@@ -4,13 +4,15 @@
 
 The currently deployed backend is not the fixed FastAPI app.
 
-Observed:
+Observed live at `https://pdf-toolkit-api.onrender.com`:
 
-- `/docs`: 404
-- `/openapi.json`: 404
-- `/api/pdf/compress`: 404 or connection reset
-- `x-render-origin-server`: gunicorn
-- HTML error body format: Flask-style 404
+- `/docs`: 404, body `Cannot GET /docs`
+- `/openapi.json`: 404, body `Cannot GET /openapi.json`
+- `/api/pdf`: 404, body `Cannot GET /api/pdf`
+- Response header: `x-powered-by: Express`
+- Response header: `x-render-origin-server: Render`
+
+Conclusion: Render is running a Node/Express service, not this FastAPI/Uvicorn application.
 
 ## Current Source
 
@@ -23,6 +25,7 @@ Validated with FastAPI TestClient:
 - `/openapi.json`: 200
 - `/api/meta`: 200
 - All 9 `/api/pdf/*` tools: 200
+- Exact Render startup shape from `backend` working directory: `/health` returns `{"status":"ok"}`, `/docs` returns 200, `/openapi.json` returns 200.
 
 ## Required Next Step
 

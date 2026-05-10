@@ -1,27 +1,28 @@
-INFO:     Started server process [32388]
+INFO:     Started server process [30488]
 INFO:     Waiting for application startup.
-2026-05-11 02:19:35,793 INFO pdf_toolkit PDF Toolkit FastAPI app started successfully
-2026-05-11 02:19:35,794 INFO pdf_toolkit App object: backend.app.main:app or app.main:app
-2026-05-11 02:19:35,794 INFO pdf_toolkit Environment mode: development
-2026-05-11 02:19:35,795 INFO pdf_toolkit Docs enabled: True
-2026-05-11 02:19:35,796 INFO pdf_toolkit CORS origins: ['https://pdf-toolkit-black-ten.vercel.app']
-2026-05-11 02:19:35,797 INFO pdf_toolkit CORS origin regex: https://.*\.vercel\.app
-2026-05-11 02:19:35,797 INFO pdf_toolkit Registered routers: PDF router mounted at /api/pdf
-2026-05-11 02:19:35,798 INFO pdf_toolkit Registered PDF routes: ['/api/pdf/compress', '/api/pdf/image-to-pdf', '/api/pdf/merge', '/api/pdf/pdf-to-image', '/api/pdf/pdf-to-word', '/api/pdf/protect', '/api/pdf/rearrange', '/api/pdf/split', '/api/pdf/watermark']
-2026-05-11 02:19:35,799 INFO pdf_toolkit Registered public routes: ['/', '/api/meta', '/api/pdf/compress', '/api/pdf/image-to-pdf', '/api/pdf/merge', '/api/pdf/pdf-to-image', '/api/pdf/pdf-to-word', '/api/pdf/protect', '/api/pdf/rearrange', '/api/pdf/split', '/api/pdf/watermark', '/docs', '/docs/oauth2-redirect', '/health', '/openapi.json', '/ready', '/redoc']
+2026-05-11 02:43:54,504 INFO pdf_toolkit PDF Toolkit FastAPI app started successfully
+2026-05-11 02:43:54,504 INFO pdf_toolkit App object: backend.app.main:app or app.main:app
+2026-05-11 02:43:54,505 INFO pdf_toolkit Environment mode: development
+2026-05-11 02:43:54,505 INFO pdf_toolkit Docs enabled: True
+2026-05-11 02:43:54,506 INFO pdf_toolkit CORS origins: ['https://pdf-toolkit-black-ten.vercel.app']
+2026-05-11 02:43:54,506 INFO pdf_toolkit CORS origin regex: https://.*\.vercel\.app
+2026-05-11 02:43:54,507 INFO pdf_toolkit Registered routers: PDF router mounted at /api/pdf
+2026-05-11 02:43:54,507 INFO pdf_toolkit Registered PDF routes: ['/api/pdf/compress', '/api/pdf/image-to-pdf', '/api/pdf/merge', '/api/pdf/pdf-to-image', '/api/pdf/pdf-to-word', '/api/pdf/protect', '/api/pdf/rearrange', '/api/pdf/split', '/api/pdf/watermark']
+2026-05-11 02:43:54,508 INFO pdf_toolkit Registered public routes: ['/', '/api/meta', '/api/pdf/compress', '/api/pdf/image-to-pdf', '/api/pdf/merge', '/api/pdf/pdf-to-image', '/api/pdf/pdf-to-word', '/api/pdf/protect', '/api/pdf/rearrange', '/api/pdf/split', '/api/pdf/watermark', '/docs', '/docs/oauth2-redirect', '/health', '/openapi.json', '/ready', '/redoc']
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8020 (Press CTRL+C to quit)
-2026-05-11 02:19:39,164 INFO pdf_toolkit GET /api/meta -> 200 0.96ms
-2026-05-11 02:19:39,387 INFO pdf_toolkit GET /health -> 200 0.77ms
-2026-05-11 02:19:39,470 INFO pdf_toolkit GET /docs -> 200 0.58ms
-2026-05-11 02:19:39,615 INFO pdf_toolkit GET /openapi.json -> 200 64.91ms
-2026-05-11 02:19:39,688 INFO pdf_toolkit GET /api/meta -> 200 0.34ms
-2026-05-11 02:19:39,850 INFO pdf_toolkit POST /api/pdf/compress -> 200 68.60ms
-2026-05-11 02:19:40,108 INFO pdf_toolkit POST /api/pdf/merge -> 200 121.51ms
-2026-05-11 02:19:40,296 INFO pdf_toolkit POST /api/pdf/split -> 200 72.96ms
-2026-05-11 02:19:40,504 INFO pdf_toolkit POST /api/pdf/rearrange -> 200 50.09ms
-2026-05-11 02:19:40,695 INFO pdf_toolkit POST /api/pdf/pdf-to-word -> 200 82.03ms
-2026-05-11 02:19:41,315 INFO pdf_toolkit POST /api/pdf/pdf-to-image -> 200 515.35ms
-2026-05-11 02:19:41,439 INFO pdf_toolkit POST /api/pdf/image-to-pdf -> 200 14.39ms
-2026-05-11 02:19:41,591 INFO pdf_toolkit POST /api/pdf/watermark -> 200 66.28ms
-2026-05-11 02:19:41,871 INFO pdf_toolkit POST /api/pdf/protect -> 200 149.38ms
+2026-05-11 02:43:57,692 INFO pdf_toolkit GET /api/meta -> 200 1.10ms
+2026-05-11 02:43:57,955 INFO pdf_toolkit GET /health -> 200 1.56ms
+2026-05-11 02:43:58,039 INFO pdf_toolkit GET /health -> 200 0.48ms
+2026-05-11 02:43:58,141 INFO pdf_toolkit GET /docs -> 200 0.79ms
+2026-05-11 02:43:58,263 INFO pdf_toolkit GET /openapi.json -> 200 29.55ms
+2026-05-11 02:43:58,357 INFO pdf_toolkit GET /api/meta -> 200 0.96ms
+2026-05-11 02:43:58,509 INFO pdf_toolkit POST /api/pdf/compress -> 200 59.16ms
+2026-05-11 02:43:58,696 INFO pdf_toolkit POST /api/pdf/merge -> 200 93.53ms
+2026-05-11 02:43:58,886 INFO pdf_toolkit POST /api/pdf/split -> 200 80.24ms
+2026-05-11 02:43:59,043 INFO pdf_toolkit POST /api/pdf/rearrange -> 200 48.70ms
+2026-05-11 02:43:59,218 INFO pdf_toolkit POST /api/pdf/pdf-to-word -> 200 62.82ms
+2026-05-11 02:43:59,856 INFO pdf_toolkit POST /api/pdf/pdf-to-image -> 200 527.50ms
+2026-05-11 02:43:59,986 INFO pdf_toolkit POST /api/pdf/image-to-pdf -> 200 15.48ms
+2026-05-11 02:44:00,205 INFO pdf_toolkit POST /api/pdf/watermark -> 200 79.82ms
+2026-05-11 02:44:00,490 INFO pdf_toolkit POST /api/pdf/protect -> 200 182.66ms

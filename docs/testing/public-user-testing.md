@@ -1,4 +1,4 @@
-# Public User Testing
+﻿# Public User Testing
 
 ## Public URLs
 
@@ -11,13 +11,13 @@ https://pdf-toolkit-black-ten.vercel.app
 Backend:
 
 ```text
-https://pdf-toolkit-backend.onrender.com
+https://pdf-toolkit-api.onrender.com
 ```
 
 API base:
 
 ```text
-https://pdf-toolkit-backend.onrender.com/api/pdf
+https://pdf-toolkit-api.onrender.com/api/pdf
 ```
 
 ## Tests To Run After Render Redeploy
@@ -38,7 +38,7 @@ https://pdf-toolkit-backend.onrender.com/api/pdf
 
 ## Expected Result
 
-- Browser console should show API requests to `https://pdf-toolkit-backend.onrender.com/api/pdf/...`.
+- Browser console should show API requests to `https://pdf-toolkit-api.onrender.com/api/pdf/...`.
 - No request should go to `localhost`.
 - OPTIONS preflight should succeed.
 - POST upload should return 200.
@@ -53,6 +53,7 @@ Current source passes all backend route tests. Public Render must be redeployed 
 After redeploy:
 
 ```powershell
-$env:RENDER_API_BASE="https://pdf-toolkit-backend.onrender.com/api/pdf"
+$env:RENDER_API_BASE="https://pdf-toolkit-api.onrender.com/api/pdf"
 powershell -ExecutionPolicy Bypass -File scripts\verify-deployment.ps1
 ```
+

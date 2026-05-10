@@ -1,4 +1,4 @@
-# Production Route Map
+﻿# Production Route Map
 
 ## Frontend
 
@@ -9,13 +9,13 @@ https://pdf-toolkit-black-ten.vercel.app
 ## Backend
 
 ```text
-https://pdf-toolkit-backend.onrender.com
+https://pdf-toolkit-api.onrender.com
 ```
 
 ## API Base
 
 ```text
-https://pdf-toolkit-backend.onrender.com/api/pdf
+https://pdf-toolkit-api.onrender.com/api/pdf
 ```
 
 ## Required Backend Routes
@@ -37,3 +37,4 @@ https://pdf-toolkit-backend.onrender.com/api/pdf
 - `POST /api/pdf/protect`
 
 Every `/api/pdf/*` route must also allow CORS preflight `OPTIONS`.
+

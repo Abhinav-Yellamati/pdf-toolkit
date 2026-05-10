@@ -1,4 +1,4 @@
-# Session History
+﻿# Session History
 
 ## 2026-05-10 11:34 IST - Documentation And Traceability Setup
 
@@ -93,7 +93,7 @@
 
 ### Completed Tasks
 - Tested the live Vercel frontend and confirmed it is publicly reachable.
-- Inspected the deployed Vercel JavaScript bundle and confirmed it references `https://pdf-toolkit-backend.onrender.com`.
+- Inspected the deployed Vercel JavaScript bundle and confirmed it references `https://pdf-toolkit-api.onrender.com`.
 - Tested the live Render backend and confirmed `/docs`, `/openapi.json`, and `/api/pdf/*` are not serving the current FastAPI app.
 - Added root-level deployment compatibility with `main.py`, `requirements.txt`, and `backend/__init__.py`.
 - Converted backend imports to package-relative imports so both root-level and backend-root uvicorn targets work.
@@ -150,3 +150,23 @@
 - Root import `backend.app.main:app` and backend-root import `app.main:app` both resolve.
 - Exact Render working-directory command `python -m uvicorn app.main:app --host 127.0.0.1 --port 8021` returned 200 for `/health`, `/docs`, and `/openapi.json`.
 - Full deployment verifier passed against a local uvicorn server for health, docs, OpenAPI, metadata, and all 9 PDF tools.
+
+## 2026-05-11 02:45 IST - Express Runtime Root Cause
+
+### Completed Tasks
+- Switched the production backend origin to `https://pdf-toolkit-api.onrender.com`.
+- Removed stray backend Node markers: `backend/package.json` and `backend/package-lock.json`.
+- Added `backend/runtime.txt` and `PYTHON_VERSION=3.12.8` to Render configuration.
+- Changed `/health` response to `{"status":"ok"}`.
+- Updated frontend production fallback and deployment docs to use `https://pdf-toolkit-api.onrender.com`.
+- Revalidated local FastAPI startup through both `backend.app.main:app` and `app.main:app`.
+
+### Live Diagnosis
+- `https://pdf-toolkit-api.onrender.com/docs` returns HTTP 404 with `x-powered-by: Express` and body `Cannot GET /docs`.
+- `https://pdf-toolkit-api.onrender.com/openapi.json` returns HTTP 404 with `x-powered-by: Express` and body `Cannot GET /openapi.json`.
+- `https://pdf-toolkit-api.onrender.com/api/pdf` returns HTTP 404 with `x-powered-by: Express` and body `Cannot GET /api/pdf`.
+
+### Conclusion
+- Render is currently running a Node/Express service, not the FastAPI/Uvicorn backend.
+- The codebase now removes backend Node auto-detection markers, but the Render service must be changed to Python 3 or recreated as a Python Web Service.
+

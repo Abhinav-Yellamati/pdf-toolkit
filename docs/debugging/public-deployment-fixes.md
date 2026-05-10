@@ -1,4 +1,4 @@
-# Public Deployment Fixes
+﻿# Public Deployment Fixes
 
 ## User-Facing Problem
 
@@ -9,14 +9,14 @@ The Vercel website opened correctly, but PDF tools failed with `Failed to fetch`
 Frontend:
 
 - `https://pdf-toolkit-black-ten.vercel.app` is publicly reachable.
-- The deployed JavaScript bundle includes `https://pdf-toolkit-backend.onrender.com`.
+- The deployed JavaScript bundle includes `https://pdf-toolkit-api.onrender.com`.
 - Therefore the browser is attempting to use the Render backend.
 
 Backend:
 
-- `https://pdf-toolkit-backend.onrender.com/docs` returned 404.
-- `https://pdf-toolkit-backend.onrender.com/openapi.json` returned 404.
-- `https://pdf-toolkit-backend.onrender.com/api/pdf/compress` returned 404 or connection reset.
+- `https://pdf-toolkit-api.onrender.com/docs` returned 404.
+- `https://pdf-toolkit-api.onrender.com/openapi.json` returned 404.
+- `https://pdf-toolkit-api.onrender.com/api/pdf/compress` returned 404 or connection reset.
 - Response headers indicated a Gunicorn origin and Flask-style 404 page, not the current FastAPI app.
 
 ## Root Cause
@@ -39,3 +39,4 @@ Render is not launching the current FastAPI ASGI app from this repository. The c
 ## Required Redeploy
 
 Render must be redeployed from this updated repository. Until that happens, public users will still hit the stale backend.
+

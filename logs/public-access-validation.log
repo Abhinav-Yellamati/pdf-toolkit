@@ -1,4 +1,4 @@
-2026-05-11 01:27 IST - Public access validation
+﻿2026-05-11 01:27 IST - Public access validation
 
 Public frontend:
 - https://pdf-toolkit-black-ten.vercel.app
@@ -6,9 +6,9 @@ Public frontend:
 - UI bundle contains Render backend URL: yes.
 
 Public backend before redeploy:
-- https://pdf-toolkit-backend.onrender.com/docs: 404.
-- https://pdf-toolkit-backend.onrender.com/openapi.json: 404.
-- https://pdf-toolkit-backend.onrender.com/api/pdf/compress: 404 or connection reset depending on method.
+- https://pdf-toolkit-api.onrender.com/docs: 404.
+- https://pdf-toolkit-api.onrender.com/openapi.json: 404.
+- https://pdf-toolkit-api.onrender.com/api/pdf/compress: 404 or connection reset depending on method.
 - Required result: not yet public-usable until Render is redeployed with the corrected FastAPI start command.
 
 Local/current-source validation:
@@ -41,19 +41,35 @@ Local/current-source validation after startup validation:
 - All 9 /api/pdf/* POST endpoints: 200.
 
 Required public URLs after redeploy:
-- https://pdf-toolkit-backend.onrender.com/health
-- https://pdf-toolkit-backend.onrender.com/docs
-- https://pdf-toolkit-backend.onrender.com/openapi.json
-- https://pdf-toolkit-backend.onrender.com/api/meta
-- https://pdf-toolkit-backend.onrender.com/api/pdf/compress
+- https://pdf-toolkit-api.onrender.com/health
+- https://pdf-toolkit-api.onrender.com/docs
+- https://pdf-toolkit-api.onrender.com/openapi.json
+- https://pdf-toolkit-api.onrender.com/api/meta
+- https://pdf-toolkit-api.onrender.com/api/pdf/compress
 
 If any of the first three URLs still returns 404 after applying the exact Render settings and redeploying the latest commit, the current Render service is stale or connected incorrectly. Delete it and create a new Web Service from the current repository.
 
 2026-05-11 02:05 IST - Live Render recheck from this environment
 
-- `https://pdf-toolkit-backend.onrender.com/health`: connection reset.
-- `https://pdf-toolkit-backend.onrender.com/docs`: timed out with no response.
+- `https://pdf-toolkit-api.onrender.com/health`: connection reset.
+- `https://pdf-toolkit-api.onrender.com/docs`: timed out with no response.
 
 Conclusion:
 - The live Render service is still not publicly usable at this moment.
 - The local source is valid; the remaining blocker is Render dashboard configuration/redeployment or a stale/wrong Render service.
+
+2026-05-11 02:45 IST - Public backend runtime confirmed wrong
+
+Live backend origin:
+- https://pdf-toolkit-api.onrender.com
+
+Observed:
+- `/docs`: 404 with `Cannot GET /docs`.
+- `/openapi.json`: 404 with `Cannot GET /openapi.json`.
+- `/api/pdf`: 404 with `Cannot GET /api/pdf`.
+- Header `x-powered-by: Express`.
+
+Public access conclusion:
+- The Render service is a Node/Express deployment right now.
+- Public users cannot use PDF tools until Render is recreated or changed to a Python Web Service using the documented uvicorn command.
+

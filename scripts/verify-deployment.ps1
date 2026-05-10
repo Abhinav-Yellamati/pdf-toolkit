@@ -1,6 +1,6 @@
 param(
   [string]$ApiBase = $env:RENDER_API_BASE,
-  [string]$ApiOrigin = $env:RENDER_API_ORIGIN,
+  [string]$ApiOrigin = $(if ($env:RENDER_API_ORIGIN) { $env:RENDER_API_ORIGIN } else { "https://pdf-toolkit-api.onrender.com" }),
   [string]$SamplePdf = "test-assets/sample-pdfs/text-small.pdf",
   [string]$OutputDir = "logs/deployment-smoke"
 )
@@ -72,6 +72,20 @@ function Invoke-StatusCheck([string]$Name, [string]$Url, [int[]]$ExpectedStatuse
   }
 }
 
+function Invoke-HealthCheck([string]$Url) {
+  $result = Invoke-StatusCheck -Name "health" -Url $Url
+  if ($result.Passed) {
+    try {
+      $body = curl.exe -sS -L --max-time 60 $Url
+      $json = $body | ConvertFrom-Json
+      $result.Passed = $json.status -eq "ok"
+    } catch {
+      $result.Passed = $false
+    }
+  }
+  return $result
+}
+
 function Invoke-ToolSmoke([string]$Name, [string[]]$CurlArgs) {
   $status = curl.exe -sS -w "%{http_code}" @CurlArgs
   [PSCustomObject]@{
@@ -103,7 +117,7 @@ $tests = @(
 )
 
 $statusChecks = @(
-  Invoke-StatusCheck -Name "health" -Url "$resolvedOrigin/health"
+  Invoke-HealthCheck -Url "$resolvedOrigin/health"
   Invoke-StatusCheck -Name "docs" -Url "$resolvedOrigin/docs"
   Invoke-StatusCheck -Name "openapi" -Url "$resolvedOrigin/openapi.json"
   Invoke-StatusCheck -Name "api-meta" -Url "$resolvedOrigin/api/meta"

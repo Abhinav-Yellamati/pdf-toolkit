@@ -1,15 +1,15 @@
-# Backend Route Map
+﻿# Backend Route Map
 
 Expected public backend origin:
 
 ```text
-https://pdf-toolkit-backend.onrender.com
+https://pdf-toolkit-api.onrender.com
 ```
 
 Expected public API base:
 
 ```text
-https://pdf-toolkit-backend.onrender.com/api/pdf
+https://pdf-toolkit-api.onrender.com/api/pdf
 ```
 
 Required routes:
@@ -33,3 +33,4 @@ Required routes:
 | `/api/pdf/protect` | POST, OPTIONS | Password protect PDF |
 
 Startup validation now requires every route above. If any of these paths is missing when the FastAPI process starts, the app raises `RuntimeError` and Render logs will show the missing route list.
+

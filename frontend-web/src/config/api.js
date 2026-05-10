@@ -1,4 +1,4 @@
-const PRODUCTION_API_ORIGIN = "https://pdf-toolkit-backend.onrender.com";
+const PRODUCTION_API_ORIGIN = "https://pdf-toolkit-api.onrender.com";
 const PRODUCTION_API_BASE = `${PRODUCTION_API_ORIGIN}/api/pdf`;
 const LOCAL_API_BASE = PRODUCTION_API_BASE;
 const API_PREFIX_CANDIDATES = ["/api/pdf", "/pdf", "/api"];

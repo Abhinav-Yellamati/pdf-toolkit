@@ -1,4 +1,4 @@
-# Production API Routing
+﻿# Production API Routing
 
 ## Problem
 
@@ -18,9 +18,9 @@ The web frontend must call the deployed Render backend, not a local development 
 Vercel:
 
 ```text
-REACT_APP_API_BASE=https://pdf-toolkit-backend.onrender.com/api/pdf
-REACT_APP_API_ORIGIN=https://pdf-toolkit-backend.onrender.com
-REACT_APP_API_URL=https://pdf-toolkit-backend.onrender.com
+REACT_APP_API_BASE=https://pdf-toolkit-api.onrender.com/api/pdf
+REACT_APP_API_ORIGIN=https://pdf-toolkit-api.onrender.com
+REACT_APP_API_URL=https://pdf-toolkit-api.onrender.com
 REACT_APP_API_TIMEOUT_MS=120000
 ```
 
@@ -28,6 +28,7 @@ Render:
 
 ```text
 ENVIRONMENT=production
+PYTHON_VERSION=3.12.8
 LOG_LEVEL=INFO
 ENABLE_DOCS=1
 MAX_FILE_MB=100
@@ -54,3 +55,4 @@ With this root directory, `app.main:app` resolves to `backend/app/main.py`. The 
 $env:RENDER_API_BASE="https://your-render-service.onrender.com/api/pdf"
 powershell -ExecutionPolicy Bypass -File scripts/verify-deployment.ps1
 ```
+

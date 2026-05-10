@@ -1,12 +1,12 @@
-2026-05-11 01:27 IST - Production network debug
+﻿2026-05-11 01:27 IST - Production network debug
 
 Frontend:
 - URL: https://pdf-toolkit-black-ten.vercel.app
 - Status from this environment: reachable, HTTP 200.
-- Deployed JS bundle contains backend origin: https://pdf-toolkit-backend.onrender.com.
+- Deployed JS bundle contains backend origin: https://pdf-toolkit-api.onrender.com.
 
 Backend:
-- URL: https://pdf-toolkit-backend.onrender.com
+- URL: https://pdf-toolkit-api.onrender.com
 - Expected FastAPI endpoints: /health, /docs, /openapi.json, /api/meta, /api/pdf/*
 - Observed deployed behavior before redeploy:
   - /docs: HTTP 404, Flask-style HTML response.
@@ -27,7 +27,7 @@ Fixes applied:
 - Updated Procfile to run python -m uvicorn backend.app.main:app from repo root.
 - Updated render.yaml startCommand to python -m uvicorn app.main:app when Render rootDir is backend.
 - Updated Render CORS defaults for https://pdf-toolkit-black-ten.vercel.app and Vercel previews.
-- Updated frontend production fallback to always use https://pdf-toolkit-backend.onrender.com/api/pdf.
+- Updated frontend production fallback to always use https://pdf-toolkit-api.onrender.com/api/pdf.
 - Added REACT_APP_API_URL compatibility because deployed Vercel currently exposes that env var.
 - Removed localhost literals from production-loaded frontend/backend runtime defaults.
 
@@ -56,6 +56,23 @@ Local proof:
 - `/api/pdf/protect`: 200
 
 Final diagnosis:
-- A live 404 at `https://pdf-toolkit-backend.onrender.com/health`, `/docs`, and `/openapi.json` cannot be produced by the current FastAPI source when launched with the documented uvicorn command.
+- A live 404 at `https://pdf-toolkit-api.onrender.com/health`, `/docs`, and `/openapi.json` cannot be produced by the current FastAPI source when launched with the documented uvicorn command.
 - Render is therefore serving a stale deployment, the wrong branch/repository, or a manually configured wrong start command/root directory.
 - If the exact Render settings are applied and a manual redeploy still serves 404, delete the existing Render service and create a new Web Service from the current repository.
+
+2026-05-11 02:45 IST - Live Render Express diagnosis
+
+Current backend origin:
+- https://pdf-toolkit-api.onrender.com
+
+Observed live responses:
+- `/health`: connection reset from this environment.
+- `/docs`: HTTP 404, `x-powered-by: Express`, body `Cannot GET /docs`.
+- `/openapi.json`: HTTP 404, `x-powered-by: Express`, body `Cannot GET /openapi.json`.
+- `/api/pdf`: HTTP 404, `x-powered-by: Express`, body `Cannot GET /api/pdf`.
+
+Exact root cause:
+- Render is running a Node/Express service, not the FastAPI app in `backend/app/main.py`.
+- The backend directory contained stray Node deployment markers (`backend/package.json` and `backend/package-lock.json`) with only `lucide-react`; these have been removed to prevent Render auto-detecting the backend as Node.
+- The correct Render service must be Python 3, root directory `backend`, start command `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`.
+
