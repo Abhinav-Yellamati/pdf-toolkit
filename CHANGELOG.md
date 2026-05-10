@@ -7,6 +7,9 @@ The format follows Keep a Changelog style. Dates use `YYYY-MM-DD`.
 ## [Unreleased]
 
 ### Added
+- Added `scripts/verify-deployment.ps1` to detect deployed FastAPI route prefixes and validate all 9 PDF endpoints.
+- Added `logs/deployment-verification.md` with endpoint verification results.
+- Added `docs/deployment/production-api-routing.md` documenting Render/Vercel API routing configuration.
 - Created a complete project documentation and traceability system with `/logs`, `/docs`, `/changelog`, and `/history`.
 - Added required append-only logs for development, build, dependency, testing, and test-result history.
 - Added presentation-ready documentation for BTP review, viva preparation, demo flow, challenges, solutions, and future scope.
@@ -18,12 +21,17 @@ The format follows Keep a Changelog style. Dates use `YYYY-MM-DD`.
 - Added Expo app icon, adaptive icon, and splash assets.
 
 ### Changed
+- Updated web and backend environment examples for `REACT_APP_API_ORIGIN`, `REACT_APP_API_BASE`, and `CORS_ORIGIN_REGEX`.
 - Consolidated project maintenance expectations into a formal logging policy under `changelog/README.md`.
 - Updated the web frontend smoke test to assert the current PDF Toolkit app shell instead of the default Create React App placeholder.
 - Changed backend runtime defaults toward production-safe behavior, including disabled reload by default and restricted CORS defaults.
 - Changed web and mobile API configuration examples from LAN/local-only values to production-ready URL placeholders.
 
 ### Fixed
+- Fixed production web API routing by introducing a centralized frontend API client with FastAPI route-prefix discovery.
+- Replaced direct hardcoded frontend upload URLs with environment-aware API base resolution.
+- Added backend `/api/meta` route metadata for deployment clients and verification tooling.
+- Updated backend CORS to support explicit Vercel origins and Vercel preview deployment origins through `CORS_ORIGIN_REGEX`.
 - Filled missing required documentation paths so future work has a consistent place to record fixes and observations.
 - Fixed stale frontend test expectation that looked for `learn react`.
 - Removed a hardcoded mobile LAN fallback from production path.

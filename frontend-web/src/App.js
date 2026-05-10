@@ -7,6 +7,7 @@ import ToolCard from "./components/ToolCard";
 import UploadPanel from "./components/UploadPanel";
 import { initialFields, tools } from "./config/tools";
 import { runPdfTool } from "./services/api";
+import { checkBackendHealth, getResolvedApiBase } from "./services/apiClient";
 import { validateFilesForTool, validateRequiredFields } from "./utils/validation";
 
 export default function App() {
@@ -20,6 +21,14 @@ export default function App() {
   const [toasts, setToasts] = useState([]);
 
   const activeTool = useMemo(() => tools.find((tool) => tool.id === activeId), [activeId]);
+
+  React.useEffect(() => {
+    getResolvedApiBase()
+      .then((apiBase) => console.info("[PDFToolkit:web-api] resolved API base", apiBase))
+      .then(() => checkBackendHealth())
+      .then((health) => console.info("[PDFToolkit:web-api] backend health", health))
+      .catch((error) => console.error("[PDFToolkit:web-api] startup diagnostics failed", error));
+  }, []);
 
   function showToast(message, tone = "info") {
     const id = Date.now();

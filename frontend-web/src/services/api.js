@@ -1,10 +1,11 @@
-const DEFAULT_API_BASE = "http://127.0.0.1:8001/api/pdf";
-const API_BASE = (process.env.REACT_APP_API_BASE || DEFAULT_API_BASE).replace(/\/+$/, "");
-const API_TIMEOUT_MS = Number(process.env.REACT_APP_API_TIMEOUT_MS || 120000);
+import { apiRequest } from "./apiClient";
 
 function apiErrorMessage(error) {
   if (error.name === "AbortError") {
     return "The request timed out. Please try again with a smaller file or check the backend service.";
+  }
+  if (/Failed to fetch|NetworkError|Load failed/i.test(error.message || "")) {
+    return "Could not reach the PDF backend. Please refresh and try again; if it continues, the Render backend may still be starting.";
   }
   return error.message || "The server could not process this file.";
 }
@@ -16,17 +17,14 @@ export async function runPdfTool(tool, files, fields, onProgress) {
     if (value !== undefined && value !== null) formData.append(key, value);
   });
 
-  const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), API_TIMEOUT_MS);
   const timer = window.setInterval(() => {
     onProgress((current) => Math.min(92, current + 7));
   }, 250);
 
   try {
-    const response = await fetch(`${API_BASE}${tool.endpoint}`, {
+    const response = await apiRequest(tool.endpoint, {
       method: "POST",
       body: formData,
-      signal: controller.signal,
     });
     if (!response.ok) {
       let message = "The server could not process this file.";
@@ -47,6 +45,5 @@ export async function runPdfTool(tool, files, fields, onProgress) {
     throw new Error(apiErrorMessage(error));
   } finally {
     window.clearInterval(timer);
-    window.clearTimeout(timeout);
   }
 }

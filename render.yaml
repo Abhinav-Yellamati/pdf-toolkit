@@ -5,7 +5,7 @@ services:
     rootDir: backend
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: ENVIRONMENT
@@ -17,4 +17,6 @@ services:
       - key: MAX_FILE_MB
         value: "100"
       - key: CORS_ORIGINS
-        value: https://your-vercel-app.vercel.app
+        value: https://pdf-toolkit-black-ten.vercel.app
+      - key: CORS_ORIGIN_REGEX
+        value: https://.*\.vercel\.app
