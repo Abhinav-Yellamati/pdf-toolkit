@@ -1,4 +1,4 @@
-const PRODUCTION_API_ORIGIN = "https://pdf-toolkit-api.onrender.com";
+const PRODUCTION_API_ORIGIN = "https://pdf-toolkit-api-v2.onrender.com";
 const PRODUCTION_API_BASE = `${PRODUCTION_API_ORIGIN}/api/pdf`;
 const LOCAL_API_BASE = "http://127.0.0.1:8001/api/pdf";
 const API_PREFIX_CANDIDATES = ["/api/pdf", "/pdf", "/api"];
@@ -22,28 +22,43 @@ function normalizeBaseUrl(value) {
   return base;
 }
 
-function productionFallback() {
-  return PRODUCTION_API_BASE;
+function isLocalApiUrl(value) {
+  try {
+    const { hostname } = new URL(value);
+    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+  } catch {
+    return false;
+  }
 }
 
-function resolveConfiguredBase() {
-  const explicitBase = normalizeBaseUrl(env("REACT_APP_API_BASE"));
+function productionSafeBase(value, isProduction) {
+  if (!value) return "";
+  return isProduction && isLocalApiUrl(value) ? "" : value;
+}
+
+export function resolveConfiguredBase(envVars = {}) {
+  const isProduction = envVars.NODE_ENV === "production";
+
+  const explicitBase = productionSafeBase(normalizeBaseUrl(envVars.REACT_APP_API_BASE), isProduction);
   if (explicitBase) return explicitBase;
 
-  const explicitOrigin = normalizeBaseUrl(env("REACT_APP_API_ORIGIN"));
+  const explicitOrigin = productionSafeBase(normalizeBaseUrl(envVars.REACT_APP_API_ORIGIN), isProduction);
   if (explicitOrigin) return `${explicitOrigin}/api/pdf`;
 
-  const legacyExplicitOrigin = normalizeBaseUrl(env("REACT_APP_API_URL"));
+  const legacyExplicitOrigin = productionSafeBase(normalizeBaseUrl(envVars.REACT_APP_API_URL), isProduction);
   if (legacyExplicitOrigin) return `${legacyExplicitOrigin}/api/pdf`;
 
-  if (env("NODE_ENV") === "production") {
-    return productionFallback();
-  }
+  if (isProduction) return PRODUCTION_API_BASE;
 
   return LOCAL_API_BASE;
 }
 
-export const CONFIGURED_API_BASE = resolveConfiguredBase();
+export const CONFIGURED_API_BASE = resolveConfiguredBase({
+  NODE_ENV: env("NODE_ENV"),
+  REACT_APP_API_BASE: env("REACT_APP_API_BASE"),
+  REACT_APP_API_ORIGIN: env("REACT_APP_API_ORIGIN"),
+  REACT_APP_API_URL: env("REACT_APP_API_URL"),
+});
 export const API_TIMEOUT_MS = Number(env("REACT_APP_API_TIMEOUT_MS") || 120000);
 export const ROUTE_PREFIX_CANDIDATES = API_PREFIX_CANDIDATES;
 export const PRODUCTION_BACKEND_ORIGIN = PRODUCTION_API_ORIGIN;
