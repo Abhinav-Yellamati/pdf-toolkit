@@ -1,6 +1,6 @@
 const PRODUCTION_API_ORIGIN = "https://pdf-toolkit-api.onrender.com";
 const PRODUCTION_API_BASE = `${PRODUCTION_API_ORIGIN}/api/pdf`;
-const LOCAL_API_BASE = PRODUCTION_API_BASE;
+const LOCAL_API_BASE = "http://127.0.0.1:8001/api/pdf";
 const API_PREFIX_CANDIDATES = ["/api/pdf", "/pdf", "/api"];
 
 function env(name) {

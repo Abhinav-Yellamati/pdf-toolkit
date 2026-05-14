@@ -18,13 +18,13 @@ cors_origins = [
     origin.strip()
     for origin in os.getenv(
         "CORS_ORIGINS",
-        "https://pdf-toolkit-black-ten.vercel.app",
+        "http://localhost:3000,http://127.0.0.1:3000,https://pdf-toolkit-black-ten.vercel.app",
     ).split(",")
     if origin.strip()
 ]
 cors_origin_regex = os.getenv(
     "CORS_ORIGIN_REGEX",
-    r"https://.*\.vercel\.app",
+    r"https://.*\.vercel\.app|http://localhost:\d+|http://127\.0\.0\.1:\d+",
 )
 allow_all_origins = "*" in cors_origins
 environment = os.getenv("ENVIRONMENT", "development").lower()
