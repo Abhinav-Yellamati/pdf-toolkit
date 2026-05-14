@@ -25,13 +25,20 @@ npm start
 
 ## API Configuration
 
-Set the backend base URL with:
+For production, set the deployed backend base URL with:
 
 ```text
-REACT_APP_API_BASE=http://127.0.0.1:8001/api/pdf
+REACT_APP_API_BASE=https://pdf-toolkit-api-v2.onrender.com/api/pdf
 ```
 
-If this variable is not set, the app uses the default in `src/services/api.js`.
+For local development, leave `REACT_APP_API_BASE` unset and optionally set:
+
+```text
+REACT_APP_DEV_API_HOST=127.0.0.1
+REACT_APP_DEV_API_PORT=8001
+```
+
+Production builds never fall back to the local development backend.
 
 ## Important Files
 
